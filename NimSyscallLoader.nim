@@ -48,6 +48,8 @@ proc rndStr(length: int): string =
 # When this function isn't called, all random functions are not random. (https://nim-lang.org/docs/random.html)
 randomize()
 
+const largePayloadThreshold = 5 * 1024 * 1024
+
 
 let banner = """
     _   ___          _____                       ____     __                    __         
@@ -1229,6 +1231,10 @@ var
 
     ectx: ECB[aes256]
     key: array[aes256.sizeKey, byte]
+
+if (not big) and (len(data) > largePayloadThreshold) and (not retrieveFromFile) and (not retrieveFromURL):
+    big = true
+    echo fmt"[*] Payload is larger than 5MB; enabling --large compile settings"
 
 proc toString(bytes: openarray[byte]): string =
     result = newString(bytes.len)

@@ -211,8 +211,8 @@ proc GetRemoteModuleHandleNtQueryInformationProcess*(hProcess: HANDLE, ModuleNam
         echo "Comparing: ", Entry.BaseDllName, " with: ", ModuleName
         var compare: int = 1
         if (Entry.BaseDllName.Buffer != nil):
-            let wideModuleName = newWideCString(ModuleName)
-            compare = lstrcmpiW(LPWSTRtoLowercase(cast[LPWSTR](addr wideModuleName)),LPWSTRtoLowercase(cast[LPWSTR](Entry.BaseDllName.Buffer)))
+            var wideModuleName: WideCString = newWideCString(ModuleName)
+            compare = lstrcmpiW(LPWSTRtoLowercase(cast[LPWSTR](wideModuleName)),LPWSTRtoLowercase(cast[LPWSTR](Entry.BaseDllName.Buffer)))
         #var compare: int = lstrcmpiW(cast[LPWSTR](NTDLL_DLL),cast[LPWSTR](Entry.BaseDllName.Buffer))
         echo "Compare: ", Entry.BaseDllName
         if(compare == 0):
